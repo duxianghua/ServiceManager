@@ -109,4 +109,5 @@ if __name__ == '__main__':
         main(options.project, options.action)
     else:
         parser.print_help()
+        pass
 
