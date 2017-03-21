@@ -38,7 +38,7 @@ class PHPDAEMON(object):
         return [i for i in l if match(r'^[A-Za-z1-9]*^', i)]
 
     @staticmethod
-    def project_re(self, p):
+    def project_re(p):
         if isinstance(p, basestring):
             re_str = "GE-{0}-.*\.conf$".format(p.upper())
         else:
