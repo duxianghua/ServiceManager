@@ -35,7 +35,7 @@ class PHPDAEMON(object):
 
     def get_project_list(self):
         l = [i for i in os.listdir(self.project_root) if os.path.isdir(os.path.join(self.project_root, i))]
-        return [i for i in l if match(r'^[A-Za-z1-9]*^', i)].sort()
+        return [i for i in l if match(r'^[A-Za-z1-9]*^', i)]
 
     @staticmethod
     def project_re(self, p):
@@ -92,7 +92,7 @@ def main(project, action):
     daemon = PHPDAEMON()
     projectlist = daemon.get_project_list()
     if project in projectlist:
-        if action in ['start','status','stop','restart']
+        if action in ['start','status','stop','restart']:
             daemon.manager(project, action)
         elif action == 'update':
             daemon.update(project)
@@ -109,5 +109,3 @@ if __name__ == '__main__':
         main(options.project, options.action)
     else:
         parser.print_help()
-        pass
-
