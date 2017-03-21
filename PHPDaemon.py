@@ -43,11 +43,13 @@ class PHPDAEMON(object):
             re_str = "GE-{0}-.*\.conf$".format(p.upper())
         else:
             raise TypeError("Not String type for %s" %p)
+        print re_str
         return re_str
 
     def manager(self, project, action):
         re_str = self.project_re(project)
         services = self.service.list_services(re_str)
+        print services
         for i in services:
             print self.service.turn_service(i, action)
 
