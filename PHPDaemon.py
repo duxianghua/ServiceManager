@@ -40,7 +40,7 @@ class PHPDAEMON(object):
     @staticmethod
     def project_re(p):
         if isinstance(p, basestring):
-            re_str = "GE-{0}-.*\.conf$".format(p.upper())
+            re_str = "GE_{0}_.*\.conf$".format(p.upper())
         else:
             raise TypeError("Not String type for %s" %p)
         print re_str
