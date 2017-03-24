@@ -3,7 +3,7 @@ from Services import ManagerServices, template
 from optparse import OptionParser
 import os
 from re import match
-from commands import getoutput
+from commands import getstatusoutput
 import json
 
 SERVICE_ID = "1"
@@ -59,8 +59,8 @@ class PHPDAEMON(object):
             cmd = "{0} {1} {2}".format(self.phpbin, exec_file, self.serverid)
         else:
             raise IOError("File not found for %s" %exec_file)
-        
-        (status, output) = getoutput(cmd)
+
+        (status, output) = getstatusoutput(cmd)
 
         if status != 0:
             raise RuntimeError("%s" %output)
@@ -88,7 +88,7 @@ class PHPDAEMON(object):
                                params=item['params'],
                                ServiceENV=item['env']
             )
-            self.service.update_service(i, content)
+            self.service.update_service(service, content)
         return len(old_services),len(add_services)
 
 def main(project, action):
