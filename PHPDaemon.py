@@ -15,7 +15,7 @@ parser.add_option("-A", "--action", dest="action",
 
 
 class PHPDAEMON(object):
-    def __init__(self, serverid, template, bin, project_root=PROJECT_PATH):
+    def __init__(self, serverid, template, bin, project_root):
         """
         说明:
         :param serverid:
