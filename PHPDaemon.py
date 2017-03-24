@@ -6,6 +6,12 @@ from re import match
 from commands import getstatusoutput
 import json
 
+SERVICE_ID = "1"
+SERVICE_TEMPLATE = "php-daemon.conf"
+SERVICE_FORMAT = ""
+PHPBIN = "/usr/bin/php"
+PROJECT_PATH = "/var/www/html/bigtwo_engine_web_v2/"
+
 parser = OptionParser()
 parser.add_option("-P", "--project", dest="project",
                   help="enter project name", action="store")
@@ -15,7 +21,7 @@ parser.add_option("-A", "--action", dest="action",
 
 
 class PHPDAEMON(object):
-    def __init__(self, serverid, template, bin, project_root):
+    def __init__(self, serverid=SERVICE_ID, phpbin=PHPBIN, project_root=PROJECT_PATH):
         """
         说明:
         :param serverid:
@@ -23,8 +29,7 @@ class PHPDAEMON(object):
         :param project_root:
         """
         self.serverid = serverid
-        self.phpbin = bin
-        self.template = template
+        self.phpbin = phpbin
         self.project_root = project_root
         self.service = ManagerServices(command='initctl', suffix='conf', services_path='/etc/init/')
 
@@ -78,7 +83,7 @@ class PHPDAEMON(object):
             self.service.delete_service(i)
 
         for item in items:
-            content = template(template_name=self.template,
+            content = template(template_name=SERVICE_TEMPLATE,
                                service=item['service'],
                                exec_path=item['exec'],
                                params=item['params'],
@@ -103,18 +108,8 @@ def main(project, action):
         print projectlist
 
 if __name__ == '__main__':
-    SERVICE_ID = "1"
-    SERVICE_TEMPLATE = "php-daemon.conf"
-    SERVICE_FORMAT = ""
-    PHPBIN = "/usr/bin/php"
-    PROJECT_PATH = "/var/www/html/bigtwo_engine_web_v2/"
-
+    daemon = PHPDAEMON()
     (options, args) = parser.parse_args()
-    daemon = PHPDAEMON(serverid=SERVICE_ID,
-                       template=SERVICE_TEMPLATE,
-                       bin=PHPBIN,
-                       project_root=PROJECT_PATH
-    )
     if options.project and options.action:
         main(options.project, options.action)
     else:
