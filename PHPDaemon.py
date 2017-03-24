@@ -98,7 +98,8 @@ def main(project, action):
         if action in ['start','status','stop','restart']:
             daemon.manager(project, action)
         elif action == 'update':
-            daemon.update(project)
+            a,b=daemon.update(project)
+            print "old services count: %s\nnew services count: %s" %(a, b)
         else:
             parser.print_help()
     else:
