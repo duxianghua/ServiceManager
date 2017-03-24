@@ -88,7 +88,7 @@ class PHPDAEMON(object):
                                params=item['params'],
                                ServiceENV=item['env']
             )
-            self.service.update_service(service, content)
+            self.service.update_service(item['service'], content)
         return len(old_services),len(add_services)
 
 def main(project, action):
