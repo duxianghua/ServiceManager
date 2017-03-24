@@ -56,9 +56,10 @@ class PHPDAEMON(object):
     def get_params(self, project):
         exec_file = os.path.join(self.project_root, project, 'install.php')
         if os.path.isfile(exec_file):
-            cmd = "{0} {1}".format(self.phpbin, exec_file)
+            cmd = "{0} {1} {2}".format(self.phpbin, exec_file, self.serverid)
         else:
             raise IOError("File not found for %s" %exec_file)
+        
         (status, output) = getoutput(cmd)
 
         if status != 0:
