@@ -5,6 +5,7 @@ import os
 from re import match
 from commands import getstatusoutput
 import json
+import sys
 
 SERVICE_ID = "1"
 SERVICE_TEMPLATE = "php-daemon.conf"
@@ -43,13 +44,11 @@ class PHPDAEMON(object):
             re_str = "GE_{0}_.*\.conf$".format(p.upper())
         else:
             raise TypeError("Not String type for %s" %p)
-        print re_str
         return re_str
 
     def manager(self, project, action):
         re_str = self.project_re(project)
         services = self.service.list_services(re_str)
-        print services
         for i in services:
             print self.service.turn_service(i, action)
 
@@ -89,7 +88,11 @@ class PHPDAEMON(object):
                                ServiceENV=item['env']
             )
             self.service.update_service(item['service'], content)
-        return len(new_services),len(add_services)
+        _str = "Delete service count:\t\t[%s]\n" %len(remove_services)
+        _str += "Added  service count:\t\t[%s]\n" %len(add_services)
+        _str += "Current services count:\t\t[%s]\n" %len(new_services)
+        sys.stdout.write(_str)
+        return True
 
 def main(project, action):
     daemon = PHPDAEMON()
@@ -98,8 +101,7 @@ def main(project, action):
         if action in ['start','status','stop','restart']:
             daemon.manager(project, action)
         elif action == 'update':
-            a,b=daemon.update(project)
-            print "old services count: %s\nnew services count: %s" %(a, b)
+            daemon.update(project)
         else:
             parser.print_help()
     else:
