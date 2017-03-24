@@ -33,7 +33,6 @@ class PHPDAEMON(object):
         self.project_root = project_root
         self.service = ManagerServices(command='initctl', suffix='conf', services_path='/etc/init/')
 
-    @staticmethod
     def get_project_list(self):
         l = [i for i in os.listdir(self.project_root) if os.path.isdir(os.path.join(self.project_root, i))]
         return [i for i in l if match(r'^[A-Za-z1-9]*^', i)]
