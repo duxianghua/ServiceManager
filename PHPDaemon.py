@@ -33,7 +33,8 @@ class PHPDAEMON(object):
         self.project_root = project_root
         self.service = ManagerServices(command='initctl', suffix='conf', services_path='/etc/init/')
 
-    def get_project_list(self):
+    @staticmethod
+    def get_project_list():
         l = [i for i in os.listdir(self.project_root) if os.path.isdir(os.path.join(self.project_root, i))]
         return [i for i in l if match(r'^[A-Za-z1-9]*^', i)]
 
@@ -89,7 +90,7 @@ class PHPDAEMON(object):
                                ServiceENV=item['env']
             )
             self.service.update_service(item['service'], content)
-        return len(old_services),len(add_services)
+        return len(new_services),len(add_services)
 
 def main(project, action):
     daemon = PHPDAEMON()
