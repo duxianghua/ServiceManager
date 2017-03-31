@@ -35,26 +35,19 @@ class ManagerServices(object):
         return full_path
 
     def update_service(self, service, content, replace=False):
-        service_file = self.path_service(service)
-        if path.exists(service_file) and replace == False:
+        service_file_path = self.path_service(service)
+        if replace == False and path.exists(service_file_path):
             return
 
-        try:
-            f = open(service_file, 'w')
-            try:
-                f.write(content)
-            finally:
-                f.close()
-        except IOError as e:
-            if e.errno not in (errno.ENOENT, errno.EISDIR, errno.EINVAL):
-                raise
+        with open(name=service_file_path, mode='w') as f:
+            f.write(content)
 
     def delete_service(self, service):
-        service_file = self.path_service(service)
+        service_file_path = self.path_service(service)
         self.turn_service(service, 'stop')
         if self.command == 'systemctl':
             self.turn_service(service, 'disable')
-        remove(service_file)
+        remove(service_file_path)
 
     def turn_service(self, service, action):
         cmd = "{0} {1} {2}".format(self.command, action, service)
