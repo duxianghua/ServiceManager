@@ -10,7 +10,7 @@ import sys
 Service_Format = "TM_{Role}_{ProjectName}_{GAMEID}"
 
 class TASKMQ(object):
-    def __init__(self, Project_Path service_directory, ServerID=None):
+    def __init__(self, Project_Path, service_directory, ServerID=None):
         self.ServerID = ServerID
         self.BIN_PATH = '/usr/bin/node'
         self.Project_Path = Project_Path
