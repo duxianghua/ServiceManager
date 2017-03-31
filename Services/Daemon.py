@@ -17,13 +17,14 @@ class TASKMQ(object):
         self.service = ManagerServices(command='systemctl', suffix='service', services_path=service_directory)
 
     def get_game_list(self):
-        __path = os.path.join(self.project_root, 'gamecode_staging')
+        __path = os.path.join(self.Project_Path, 'gamecode_staging')
         with open(__path, 'r') as f:
-            return f.read().split('\n')
+             l=f.read().split('\n')
+        return l
 
     @staticmethod
     def project_re(Project, Role):
-        if isinstance(p, basestring):
+        if isinstance(Project, basestring):
             re_str = "TM_{Role}_{ProjectName}_*.service$".format(ProjectName=Project.upper(), Role=Role)
         else:
             raise TypeError("Not String type for %s" %p)
@@ -36,9 +37,9 @@ class TASKMQ(object):
             print self.service.turn_service(i, action)
 
     def update(self, project, Role, Number=None):
-        re_str = self.project_re(project)
+        re_str = self.project_re(project, Role)
         if Role == 'MANAGER':
-            for i in self.get_game_list:
+            for i in self.get_game_list():
                 _role = 'MANAGER'
                 _project = project
                 _exec_path = '/usr/share/nodejs/taskmq-manager/bin/www'
@@ -51,7 +52,8 @@ class TASKMQ(object):
                           service = _service,
                           env = _env
                     )
-                self.service.update_service(item['service'], content)
+                print context
+                #self.service.update_service(item['service'], content)
 
         elif Role == 'WORKER':
             pass
