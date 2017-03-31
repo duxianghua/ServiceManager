@@ -45,7 +45,7 @@ class TASKMQ(object):
                 _exec_path = '/usr/share/nodejs/taskmq-manager/bin/www'
                 _env = 'staging'
                 _service = "TM_{Role}_{ProjectName}_{GAMEID}".format(Role=_role, ProjectName=_project, GAMEID=i)
-                content = _template('taskmq.conf',
+                content = template('taskmq.conf',
                           role = _role,
                           project = _project,
                           exec_path = _exec_path,
