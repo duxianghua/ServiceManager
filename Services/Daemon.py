@@ -52,7 +52,7 @@ class TASKMQ(object):
                           service = _service,
                           env = _env
                     )
-                print context
+                print content
                 #self.service.update_service(item['service'], content)
 
         elif Role == 'WORKER':
