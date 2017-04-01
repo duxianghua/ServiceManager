@@ -47,6 +47,7 @@ class TASKMQ(object):
                 _service = "TM_{Role}_{ProjectName}_{GAMEID}".format(Role=_role, ProjectName=_project, GAMEID=i)
                 content = template('taskmq.conf',
                           role = _role,
+                          Game = i,
                           project = _project,
                           exec_path = _exec_path,
                           service = _service,
