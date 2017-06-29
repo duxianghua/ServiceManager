@@ -1,62 +1,45 @@
 # -*- coding: utf-8 -*-
-from Services import ManagerServices, template
-from optparse import OptionParser
+from Services import BaseServices
+from loader import render_to_string
 import os
 from re import match
-from commands import getstatusoutput
-import json
-import sys
 
-Service_Format = "TM_{Role}_{ProjectName}_{GAMEID}"
 
-class TASKMQ(object):
-    def __init__(self, Project_Path, service_directory, ServerID=None):
-        self.ServerID = ServerID
-        self.BIN_PATH = '/usr/bin/node'
-        self.Project_Path = Project_Path
-        self.service = ManagerServices(command='systemctl', suffix='service', services_path=service_directory)
+class ServicesError(Exception):
+    pass
+
+
+class TaksManagerServices:
+    def __init__(self,nodeenv , command, suffix, service_directory, project_directory):
+        self.nodeenv = nodeenv
+        self.command = command
+        self.suffix = suffix
+        self.services_path = service_directory
+        self.project_directory = project_directory
+        self.service = BaseServices(command='systemd', suffix='service', service_directory='/etc/systemd/system')
 
     def get_game_list(self):
-        __path = os.path.join(self.Project_Path, 'gamecode_staging')
+        game_file = "gamecode_%s" %self.nodeenv
+        __path = os.path.join(self.project_directory, file)
         with open(__path, 'r') as f:
              l=f.read().split('\n')
         return l
 
-    @staticmethod
-    def project_re(Project, Role):
-        if isinstance(Project, basestring):
-            re_str = "TM_{Role}_{ProjectName}_*.service$".format(ProjectName=Project.upper(), Role=Role)
-        else:
-            raise TypeError("Not String type for %s" %p)
+    def make_service_name(self, role='MANAGER', project='*', game='*'):
+        re_str = "TM_{Role}_{ProjectName}_{Game}.service$".format(Role=role, ProjectName=project, Game=game)
         return re_str
 
-    def manager(self, project, action):
-        re_str = self.project_re(project)
+    def manager(self, role, project, action):
+        re_str = self.make_service_name(role, project)
         services = self.service.list_services(re_str)
         for i in services:
             print self.service.turn_service(i, action)
 
-    def update(self, project, Role, Number=None):
-        re_str = self.project_re(project, Role)
-        if Role == 'MANAGER':
-            for i in self.get_game_list():
-                _role = 'MANAGER'
-                _project = project
-                _exec_path = '/usr/share/nodejs/taskmq-manager/bin/www'
-                _env = 'staging'
-                _service = "TM_{Role}_{ProjectName}_{GAMEID}".format(Role=_role, ProjectName=_project, GAMEID=i)
-                content = template('taskmq.conf',
-                          role = _role,
-                          Game = i,
-                          project = _project,
-                          exec_path = _exec_path,
-                          service = _service,
-                          env = _env
-                    )
-                print content
-                #self.service.update_service(item['service'], content)
+    def render(self, Game):
+        Role ="MANAGER"
+        Game = Game
+        env = self.nodeenv
+        exec_path = os.path.join(self.project_directory, "bin/www")
 
-        elif Role == 'WORKER':
-            pass
-        else:
-            raise ValueError("Role type error: %s" %Role)
+    def update(self, project, Role, Number=None):
+        pass
